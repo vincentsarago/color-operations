@@ -9,12 +9,12 @@
       <img src="https://github.com/vincentsarago/color-ops/workflows/CI/badge.svg" alt="Test">
   </a>
   <a href="https://codecov.io/gh/vincentsarago/color-ops" target="_blank">
-      <img src="https://codecov.io/gh/vincentsarago/color-ops/branch/master/graph/badge.svg" alt="Coverage">
+      <img src="https://codecov.io/gh/vincentsarago/color-ops/branch/main/graph/badge.svg" alt="Coverage">
   </a>
   <a href="https://pypi.org/project/color-ops" target="_blank">
       <img src="https://img.shields.io/pypi/v/color-ops?color=%2334D058&label=pypi%20package" alt="Package version">
   </a>
-  <a href="https://github.com/vincentsarago/color-ops/blob/master/LICENSE" target="_blank">
+  <a href="https://github.com/vincentsarago/color-ops/blob/main/LICENSE" target="_blank">
       <img src="https://img.shields.io/github/license/vincentsarago/color-ops.svg" alt="Downloads">
   </a>
 </p>
