@@ -104,6 +104,8 @@ The `color_operations.operations.parse_operations` function takes an *operations
 returns a list of python functions which can be applied to an array.
 
 ```python
+from color_operations import parse_operations
+
 ops = "gamma b 1.85, gamma rg 1.95, sigmoidal rgb 35 0.13, saturation 1.15"
 
 assert arr.shape[0] == 3
@@ -123,18 +125,21 @@ For more information on operation strings, see the `rio color` command line help
 The `colorspace` module provides functions for converting scalars and numpy arrays between different colorspaces.
 
 ```python
->>> from color_operations.colorspace import ColorSpace as cs  # enum defining available color spaces
->>> from color_operations.colorspace import convert, convert_arr
->>> convert_arr(array, src=cs.rgb, dst=cs.lch) # for arrays
+from color_operations.colorspace import ColorSpace as cs  # enum defining available color spaces
+from color_operations.colorspace import convert, convert_arr
+
+convert_arr(array, src=cs.rgb, dst=cs.lch) # for arrays
 ...
->>> convert(r, g, b, src=cs.rgb, dst=cs.lch)  # for scalars
+
+convert(r, g, b, src=cs.rgb, dst=cs.lch)  # for scalars
 ...
->>> dict(cs.__members__)  # can convert to/from any of these color spaces
+
+dict(cs.__members__)  # can convert to/from any of these color spaces
 {
- 'rgb': <ColorSpace.rgb: 0>,
- 'xyz': <ColorSpace.xyz: 1>,
- 'lab': <ColorSpace.lab: 2>,
- 'lch': <ColorSpace.lch: 3>,
- 'luv': <ColorSpace.luv: 4>
- }
+    'rgb': <ColorSpace.rgb: 0>,
+    'xyz': <ColorSpace.xyz: 1>,
+    'lab': <ColorSpace.lab: 2>,
+    'lch': <ColorSpace.lch: 3>,
+    'luv': <ColorSpace.luv: 4>
+}
 ```
