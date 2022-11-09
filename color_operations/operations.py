@@ -24,8 +24,8 @@
 
 import numpy
 
-from color_ops.colorspace import saturate_rgb
-from color_ops.utils import epsilon
+from color_operations.colorspace import saturate_rgb
+from color_operations.utils import epsilon
 
 
 # Color manipulation functions

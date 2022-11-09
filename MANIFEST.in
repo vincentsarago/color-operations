@@ -1,3 +1,3 @@
 include README.md CHANGES.md LICENSE setup.py pyproject.toml setup.cfg
-include color_ops/*.pyx
-include color_ops/*.c
+include color_operations/*.pyx
+include color_operations/*.c

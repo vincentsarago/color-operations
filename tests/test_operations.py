@@ -24,7 +24,7 @@
 import numpy as np
 import pytest
 
-from color_ops.operations import (
+from color_operations.operations import (
     gamma,
     parse_operations,
     saturation,
@@ -32,7 +32,7 @@ from color_ops.operations import (
     simple_atmo,
     simple_atmo_opstring,
 )
-from color_ops.utils import to_math_type
+from color_operations.utils import to_math_type
 
 
 @pytest.fixture

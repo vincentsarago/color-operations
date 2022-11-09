@@ -51,18 +51,20 @@ if cythonize and "clean" not in sys.argv:
     ext_modules = cythonize(
         [
             Extension(
-                "color_ops.colorspace",
-                ["color_ops/colorspace.pyx"],
+                "color_operations.colorspace",
+                ["color_operations/colorspace.pyx"],
                 extra_compile_args=["-O2"],
             )
         ]
     )
 else:
-    ext_modules = [Extension("color_ops.colorspace", ["color_ops/colorspace.c"])]
+    ext_modules = [
+        Extension("color_operations.colorspace", ["color_operations/colorspace.c"])
+    ]
 
 
 setup(
-    name="color-ops",
+    name="color-operations",
     description="Apply basic color-oriented image operations.",
     long_description=readme,
     long_description_content_type="text/markdown",
@@ -83,7 +85,7 @@ setup(
     keywords="",
     author="Vincent Sarago",
     author_email="vincent@developmentseed.com",
-    url="https://github.com/vincentsarago/color-ops",
+    url="https://github.com/vincentsarago/color-operations",
     license="MIT",
     packages=find_packages(exclude=["tests"]),
     include_package_data=True,

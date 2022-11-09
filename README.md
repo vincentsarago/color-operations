@@ -1,21 +1,21 @@
-# color-ops
+# color-operations
 
 <p align="center">
   <p align="center">Apply basic color-oriented image operations.</p>
 </p>
 
 <p align="center">
-  <a href="https://github.com/vincentsarago/color-ops/actions?query=workflow%3ACI" target="_blank">
-      <img src="https://github.com/vincentsarago/color-ops/workflows/CI/badge.svg" alt="Test">
+  <a href="https://github.com/vincentsarago/color-operations/actions?query=workflow%3ACI" target="_blank">
+      <img src="https://github.com/vincentsarago/color-operations/workflows/CI/badge.svg" alt="Test">
   </a>
-  <a href="https://codecov.io/gh/vincentsarago/color-ops" target="_blank">
-      <img src="https://codecov.io/gh/vincentsarago/color-ops/branch/main/graph/badge.svg" alt="Coverage">
+  <a href="https://codecov.io/gh/vincentsarago/color-operations" target="_blank">
+      <img src="https://codecov.io/gh/vincentsarago/color-operations/branch/main/graph/badge.svg" alt="Coverage">
   </a>
-  <a href="https://pypi.org/project/color-ops" target="_blank">
-      <img src="https://img.shields.io/pypi/v/color-ops?color=%2334D058&label=pypi%20package" alt="Package version">
+  <a href="https://pypi.org/project/color-operations" target="_blank">
+      <img src="https://img.shields.io/pypi/v/color-operations?color=%2334D058&label=pypi%20package" alt="Package version">
   </a>
-  <a href="https://github.com/vincentsarago/color-ops/blob/main/LICENSE" target="_blank">
-      <img src="https://img.shields.io/github/license/vincentsarago/color-ops.svg" alt="license">
+  <a href="https://github.com/vincentsarago/color-operations/blob/main/LICENSE" target="_blank">
+      <img src="https://img.shields.io/github/license/vincentsarago/color-operations.svg" alt="license">
   </a>
 </p>
 
@@ -23,18 +23,18 @@ Lightweight version of [**rio-color**](https://github.com/mapbox/rio-color) but 
 
 ## Install
 
-You can install color-ops using pip
+You can install color-operations using pip
 
 ```
 pip install -U pip
-pip install color-ops
+pip install color-operations
 ```
 
 Build from source
 
 ```
-git checkout https://github.com/vincentsarago/color-ops.git
-cd color-ops
+git checkout https://github.com/vincentsarago/color-operations.git
+cd color-operations
 pip install -U pip
 pip install -e .
 ```
@@ -89,7 +89,7 @@ Ref https://github.com/mapbox/rio-color/blob/master/README.md
 
 ## Python API
 
-#### `color_ops.operations`
+#### `color_operations.operations`
 
 The following functions accept and return numpy `ndarrays`. The arrays are assumed to be scaled 0 to 1. In some cases, the input array is assumed to be in the RGB colorspace.
 
@@ -100,7 +100,7 @@ All arrays use rasterio ordering with the shape as (bands, columns, rows). Be aw
 * `saturation(rgb, proportion)`
 * `simple_atmo(rgb, haze, contrast, bias)`
 
-The `color_ops.operations.parse_operations` function takes an *operations string* and
+The `color_operations.operations.parse_operations` function takes an *operations string* and
 returns a list of python functions which can be applied to an array.
 
 ```python
@@ -118,13 +118,13 @@ This provides a tiny domain specific language (DSL) to allow you
 to compose ordered chains of image manipulations using the above operations.
 For more information on operation strings, see the `rio color` command line help.
 
-#### `color_ops.colorspace`
+#### `color_operations.colorspace`
 
 The `colorspace` module provides functions for converting scalars and numpy arrays between different colorspaces.
 
 ```python
->>> from color_ops.colorspace import ColorSpace as cs  # enum defining available color spaces
->>> from color_ops.colorspace import convert, convert_arr
+>>> from color_operations.colorspace import ColorSpace as cs  # enum defining available color spaces
+>>> from color_operations.colorspace import convert, convert_arr
 >>> convert_arr(array, src=cs.rgb, dst=cs.lch) # for arrays
 ...
 >>> convert(r, g, b, src=cs.rgb, dst=cs.lch)  # for scalars

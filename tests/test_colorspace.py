@@ -32,8 +32,8 @@ from colormath.color_objects import LabColor, LCHabColor, LuvColor, XYZColor, sR
 # enums required to define src and dst for convert and convert_arr
 # public scalar func
 # public 3d array funcs
-from color_ops.colorspace import ColorSpace as cs
-from color_ops.colorspace import convert, convert_arr, saturate_rgb
+from color_operations.colorspace import ColorSpace as cs
+from color_operations.colorspace import convert, convert_arr, saturate_rgb
 
 try:
     from collections.abc import Iterable

@@ -47,8 +47,8 @@ def scale_dtype(arr, dtype):
     return (arr * max_int).astype(dtype)
 
 
-def magick_to_rio(convert_opts):
-    """Translate a limited subset of imagemagick convert commands to rio color operations.
+def magick_to_operations(convert_opts):
+    """Translate a limited subset of imagemagick convert commands to color-operations operations.
 
     Parameters
     ----------
@@ -120,3 +120,6 @@ def magick_to_rio(convert_opts):
             nextf = None
 
     return " ".join(ops)
+
+
+magick_to_rio = magick_to_operations
