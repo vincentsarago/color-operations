@@ -1,0 +1,40 @@
+repos:
+  - repo: https://github.com/psf/black
+    rev: 22.3.0
+    hooks:
+      - id: black
+        language_version: python
+        args: [--safe]
+
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.10.1
+    hooks:
+      - id: isort
+        language_version: python
+        args: ['--profile=black']
+
+  - repo: https://github.com/PyCQA/flake8
+    rev: 5.0.4
+    hooks:
+      - id: flake8
+        language_version: python
+        args: [
+              # E501 let black handle all line length decisions
+              # W503 black conflicts with "line break before operator" rule
+              # E203 black conflicts with "whitespace before ':'" rule
+              '--ignore=E501,W503,E203']
+
+  - repo: https://github.com/PyCQA/pydocstyle
+    rev: 6.1.1
+    hooks:
+      - id: pydocstyle
+        language_version: python
+        additional_dependencies:
+          - toml
+        args: [
+            # Check for docstring presence only
+            '--select=D1',
+            # Don't require docstrings for tests
+            '--match=(?!test).*\.py',
+            # Skip docstring check for dunder methods
+            --add-ignore=D105]
