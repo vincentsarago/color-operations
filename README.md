@@ -15,7 +15,7 @@
       <img src="https://img.shields.io/pypi/v/color-ops?color=%2334D058&label=pypi%20package" alt="Package version">
   </a>
   <a href="https://github.com/vincentsarago/color-ops/blob/main/LICENSE" target="_blank">
-      <img src="https://img.shields.io/github/license/vincentsarago/color-ops.svg" alt="Downloads">
+      <img src="https://img.shields.io/github/license/vincentsarago/color-ops.svg" alt="license">
   </a>
 </p>
 
