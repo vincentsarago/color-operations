@@ -1,4 +1,4 @@
-"""test color_ops.utils.py."""
+"""test color_operations.utils.py."""
 # The MIT License (MIT)
 #
 # Copyright (c) 2015 Mapbox

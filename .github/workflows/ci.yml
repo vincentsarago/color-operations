@@ -43,7 +43,7 @@ jobs:
 
       - name: Run Tests
         run: |
-          python -m pytest --cov color_ops --cov-report xml --cov-report term-missing
+          python -m pytest --cov color_operations --cov-report xml --cov-report term-missing
 
       - name: Upload Results
         if: ${{ matrix.name == 'Ubuntu' }}
