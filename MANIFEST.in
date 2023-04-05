@@ -1,3 +1,10 @@
-include README.md CHANGES.md LICENSE setup.py pyproject.toml setup.cfg
+include CHANGES.md LICENSE  README.md pyproject.toml setup.cfg setup.py
 include color_operations/*.pyx
+include color_operations/*.pxd
+exclude color_operations/*.c
+exclude color_operations/*.cpp
 
+include color_operations/*.py
+recursive-include tests *.py
+
+exclude MANIFEST.in
