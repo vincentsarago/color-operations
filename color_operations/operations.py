@@ -232,7 +232,7 @@ def _op_factory(func, kwargs, opname, bands, rgb_op=False):
     return f
 
 
-def parse_operations(ops_string):
+def parse_operations(ops_string):  # noqa: C901
     """Takes a string of operations written with a handy DSL
 
     "OPERATION-NAME BANDS ARG1 ARG2 OPERATION-NAME BANDS ARG"
@@ -276,8 +276,8 @@ def parse_operations(ops_string):
 
         try:
             func = opfuncs[opname]
-        except KeyError:
-            raise ValueError("{} is not a valid operation".format(opname))
+        except KeyError as e:
+            raise ValueError("{} is not a valid operation".format(opname)) from e
 
         if opname in rgb_ops:
             # ignore bands, assumed to be in rgb

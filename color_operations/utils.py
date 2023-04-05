@@ -47,7 +47,7 @@ def scale_dtype(arr, dtype):
     return (arr * max_int).astype(dtype)
 
 
-def magick_to_operations(convert_opts):
+def magick_to_operations(convert_opts):  # noqa: C901
     """Translate a limited subset of imagemagick convert commands to color-operations operations.
 
     Parameters
