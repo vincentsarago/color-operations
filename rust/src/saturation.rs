@@ -1,6 +1,5 @@
+use numpy::ndarray::Array3;
 use numpy::ndarray::ArrayView3;
-use numpy::ndarray::{Array3, ArrayD, ArrayViewD, ArrayViewMutD};
-use numpy::PyArray3;
 
 use crate::colorspace::{convert, ColorSpace};
 

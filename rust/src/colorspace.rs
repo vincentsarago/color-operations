@@ -1,5 +1,3 @@
-// rgb tofrom LCH
-
 use lazy_static::lazy_static;
 
 // Constants
@@ -17,11 +15,11 @@ lazy_static! {
 const THIRD: f64 = 1.0 / 3.;
 const GAMMA: f64 = 2.2;
 const XN: f64 = 0.95047;
-const YN: f64 = 1.0;
+// const YN: f64 = 1.0;
 const ZN: f64 = 1.08883;
-const DENOM_N: f64 = XN + (15. * YN) + (3. * ZN);
-const UPRIME_N: f64 = (4. * XN) / DENOM_N;
-const VPRIME_N: f64 = (9. * YN) / DENOM_N;
+// const DENOM_N: f64 = XN + (15. * YN) + (3. * ZN);
+// const UPRIME_N: f64 = (4. * XN) / DENOM_N;
+// const VPRIME_N: f64 = (9. * YN) / DENOM_N;
 
 /// Compile time option to use
 /// sRGB companding (default, True) or simplified gamma (False)
@@ -55,6 +53,7 @@ impl From<(f64, f64, f64)> for Color {
     }
 }
 
+#[allow(clippy::upper_case_acronyms)]
 pub enum ColorSpace {
     RGB,
     LCH,
