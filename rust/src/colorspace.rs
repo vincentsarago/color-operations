@@ -32,9 +32,9 @@ const SRGB_COMPAND: bool = true;
 
 /// A color with three values
 pub struct Color {
-    one: f64,
-    two: f64,
-    three: f64,
+    pub one: f64,
+    pub two: f64,
+    pub three: f64,
 }
 
 impl Color {

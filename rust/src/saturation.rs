@@ -1,38 +1,32 @@
 use numpy::ndarray::ArrayView3;
+use numpy::ndarray::{Array3, ArrayD, ArrayViewD, ArrayViewMutD};
+use numpy::PyArray3;
 
-pub fn saturate_rgb(arr: ArrayView3<'_, f64>, satmult: f64) {
+use crate::colorspace::{convert, ColorSpace};
 
+pub fn saturate_rgb(arr: ArrayView3<'_, f64>, satmult: f64) -> Array3<f64> {
+    let shape = arr.shape();
+    assert_eq!(shape[0], 3, "The 0th dimension must contain 3 bands");
+
+    let dim_i = shape[1];
+    let dim_j = shape[2];
+
+    let mut out = Array3::<f64>::zeros((3, dim_i, dim_j));
+    for i in 0..dim_i {
+        for j in 0..dim_j {
+            let r = arr[(0, i, j)];
+            let g = arr[(1, i, j)];
+            let b = arr[(2, i, j)];
+
+            let mut c_lch = convert((r, g, b).into(), ColorSpace::RGB, ColorSpace::LCH);
+            c_lch.two *= satmult;
+            let c_rgb = convert(c_lch, ColorSpace::LCH, ColorSpace::RGB);
+
+            out[(0, i, j)] = c_rgb.one;
+            out[(1, i, j)] = c_rgb.two;
+            out[(2, i, j)] = c_rgb.three;
+        }
+    }
+
+    out
 }
-
-// cpdef np.ndarray[FLOAT_t, ndim=3] saturate_rgb(np.ndarray[FLOAT_t, ndim=3] arr, double satmult):
-//     """Convert array of RGB -> LCH, adjust saturation, back to RGB
-//     A special case of convert_arr with hardcoded color spaces and
-//     a bit of data manipulation inside the loop.
-//     """
-//     cdef double r, g, b
-//     cdef color c_lch
-//     cdef color c_rgb
-
-//     if arr.shape[0] != 3:
-//         raise ValueError("The 0th dimension must contain 3 bands")
-
-//     I = arr.shape[1]
-//     J = arr.shape[2]
-
-//     cdef np.ndarray[FLOAT_t, ndim=3] out = np.empty(shape=(3, I, J))
-
-//     for i in range(I):
-//         for j in range(J):
-//             r = arr[0, i, j]
-//             g = arr[1, i, j]
-//             b = arr[2, i, j]
-
-//             c_lch = _convert(r, g, b, RGB, LCH)
-//             c_lch.two *= satmult
-//             c_rgb = _convert(c_lch.one, c_lch.two, c_lch.three, LCH, RGB)
-
-//             out[0, i, j] = c_rgb.one
-//             out[1, i, j] = c_rgb.two
-//             out[2, i, j] = c_rgb.three
-
-//     return out
