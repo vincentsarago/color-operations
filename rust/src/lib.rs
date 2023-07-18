@@ -1,4 +1,6 @@
 use pyo3::prelude::*;
+mod colorspace;
+mod saturation;
 
 /// Formats the sum of two numbers as string.
 #[pyfunction]
