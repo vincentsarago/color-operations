@@ -1,4 +1,8 @@
 
+## Unreleased
+
+* add python 3.12 support (author @mentaljam, https://github.com/vincentsarago/color-operations/pull/5)
+
 ## 0.1.1 (2023-04-05)
 
 * remove `.c` file from package
