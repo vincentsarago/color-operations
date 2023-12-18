@@ -65,7 +65,7 @@ cdef enum:
 cpdef convert(double one, double two, double three, src, dst):
     cdef color color
 
-    if src not in ColorSpace or dst not in ColorSpace:
+    if ColorSpace(src) not in ColorSpace or ColorSpace(dst) not in ColorSpace:
         raise ValueError("Invalid colorspace")
 
     color = _convert(one, two, three, int(src), int(dst))

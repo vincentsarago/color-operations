@@ -203,13 +203,13 @@ def test_array_bad_colorspace():
 
 def test_bad_colorspace_string():
     """String colorspaces raise ValueError"""
-    with pytest.raises(TypeError):
+    with pytest.raises(ValueError):
         convert(0.1, 0.1, 0.1, src="FOO", dst="RGB")
 
 
 def test_bad_colorspace_invalid_int():
     """Invalid colorspace integers raise ValueError"""
-    with pytest.raises(TypeError):
+    with pytest.raises(ValueError):
         convert(0.1, 0.1, 0.1, src=999, dst=999)
 
 
