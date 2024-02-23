@@ -12,3 +12,6 @@ crate-type = ["cdylib"]
 numpy = "0.19.0"
 pyo3 = "0.19.0"
 lazy_static = "1.4"
+
+[dev-dependencies]
+approx = "0.5.1"

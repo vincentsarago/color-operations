@@ -29,6 +29,7 @@ const ZN: f64 = 1.08883;
 const SRGB_COMPAND: bool = true;
 
 /// A color with three values
+#[derive(Clone, Copy, Debug)]
 pub struct Color {
     pub one: f64,
     pub two: f64,
