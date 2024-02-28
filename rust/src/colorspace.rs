@@ -70,11 +70,7 @@ pub fn convert(c: Color, src: ColorSpace, dst: ColorSpace) -> Color {
             lab_to_lch(c)
         }
         (ColorSpace::LCH, ColorSpace::LCH) => c,
-        (ColorSpace::LCH, ColorSpace::RGB) => {
-            let c = lch_to_lab(c);
-            let c = lab_to_xyz(c);
-            xyz_to_rgb(c)
-        }
+        (ColorSpace::LCH, ColorSpace::RGB) => lch_to_rgb(c),
     }
 }
 
@@ -238,4 +234,61 @@ fn xyz_to_rgb(c: Color) -> Color {
     let b = b.clamp(0.0, 1.0);
 
     (r, g, b).into()
+}
+
+/// Convert LCH color to RGB color
+fn lch_to_rgb(c: Color) -> Color {
+    let c = lch_to_lab(c);
+    let c = lab_to_xyz(c);
+    xyz_to_rgb(c)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn tests() -> Vec<(Color, Color)> {
+        vec![
+            ((0., 0., 0.).into(), (0., 0., 0.).into()),
+            ((1.0, 0., 0.).into(), (53.2, 104.6, 0.7).into()),
+            (
+                (0.392156, 0.776470, 0.164705).into(),
+                (71.7, 83.5, 2.3).into(),
+            ),
+            (
+                (0.0392, 0.1960, 0.3529).into(),
+                (20.3517, 27.8757, -1.4612).into(),
+            ),
+            (
+                (0.0456, 0.1929, 0.3941).into(),
+                (20.8945, 34.9429, -1.3244).into(),
+            ),
+            ((1.0, 1.0, 1.0).into(), (100., 0., 2.8).into()),
+        ]
+    }
+
+    fn color_near(a: Color, b: Color, tol: (f64, f64, f64)) -> bool {
+        if (a.one - b.one).abs() > tol.0 {
+            return false;
+        }
+
+        if (a.two - b.two).abs() > tol.1 {
+            return false;
+        }
+
+        if (a.three - b.three).abs() > tol.2 {
+            return false;
+        }
+
+        true
+    }
+
+    #[test]
+    fn test_lch_to_rgb() {
+        let tests = tests();
+        for (rgb, lch) in tests {
+            let argb = lch_to_rgb(lch);
+            assert!(color_near(argb, rgb, (1.0, 1.0, 0.1)));
+        }
+    }
 }
