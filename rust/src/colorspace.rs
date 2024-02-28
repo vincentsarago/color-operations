@@ -60,6 +60,64 @@ pub enum ColorSpace {
     LCH,
 }
 
+/// A Color defined by Red, Green, Blue
+#[derive(Clone, Copy, Debug)]
+pub struct RGBColor {
+    pub red: f64,
+    pub green: f64,
+    pub blue: f64,
+}
+
+/// A Color defined by X, Y, Z
+#[derive(Clone, Copy, Debug)]
+pub struct XYZColor {
+    pub x: f64,
+    pub y: f64,
+    pub z: f64,
+}
+
+impl From<RGBColor> for XYZColor {
+    fn from(value: RGBColor) -> Self {
+        let r = value.red;
+        let g = value.green;
+        let b = value.blue;
+
+        // Convert RGB to linear scale
+        let (rl, gl, bl) = if SRGB_COMPAND {
+            let rl = if r <= 0.04045 {
+                r / 12.92
+            } else {
+                ((r + 0.055) / 1.055).powf(2.4)
+            };
+
+            let gl = if g <= 0.04045 {
+                g / 12.92
+            } else {
+                ((g + 0.055) / 1.055).powf(2.4)
+            };
+
+            let bl = if b <= 0.04045 {
+                b / 12.92
+            } else {
+                ((b + 0.055) / 1.055).powf(2.4)
+            };
+
+            (rl, gl, bl)
+        } else {
+            // Use "simplified sRGB"
+            (r.powf(GAMMA), g.powf(GAMMA), b.powf(GAMMA))
+        };
+
+        // matrix mult for srgb->xyz,
+        // includes adjustment for reference white
+        let x = ((rl * 0.4124564) + (gl * 0.3575761) + (bl * 0.1804375)) / XN;
+        let y = (rl * 0.2126729) + (gl * 0.7151522) + (bl * 0.0721750);
+        let z = ((rl * 0.0193339) + (gl * 0.1191920) + (bl * 0.9503041)) / ZN;
+
+        Self { x, y, z }
+    }
+}
+
 /// Convert a color from one color space to another
 pub fn convert(c: Color, src: ColorSpace, dst: ColorSpace) -> Color {
     match (src, dst) {
