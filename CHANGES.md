@@ -1,4 +1,8 @@
 
+## 0.1.3 (2024-03-13)
+
+* no changes since `0.1.2`
+
 ## 0.1.2 (2023-12-18)
 
 * add python 3.12 support (author @mentaljam, https://github.com/vincentsarago/color-operations/pull/5)
