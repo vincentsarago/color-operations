@@ -2,8 +2,8 @@
 requires = [
   "setuptools",
   "wheel",
-  "cython>=0.29.32",
-  "oldest-supported-numpy",
+  "cython>=0.29.32,<3.0",
+  "oldest-supported-numpy @ git+https://github.com/vincentsarago/oldest-supported-numpy.git@patch/update-for-python38-aarch64",
 ]
 
 [tool.coverage.run]
