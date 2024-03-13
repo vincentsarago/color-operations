@@ -77,7 +77,7 @@ jobs:
       - uses: pypa/cibuildwheel@v2.16.5
         env:
           # https://github.com/mapbox/rio-color/blob/0ab59ad8e2db99ad1d0c8bd8c2e4cf8d0c3114cf/appveyor.yml#L3
-          CIBW_SKIP: 'cp27* cp35* pp* *-win32 *-manylinux_i686'
+          CIBW_SKIP: 'cp27* cp35* pp* *-win32 *-manylinux_i686 *musllinux*'
           CIBW_ARCHS_MACOS: x86_64 arm64 universal2
           CIBW_ARCHS_LINUX: auto aarch64
           # CIBW_TEST_REQUIRES: pytest colormath==2.0.2
