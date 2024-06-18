@@ -1,4 +1,9 @@
 
+## 0.1.4 (2024-06-18)
+
+* limit numpy to **~1.0**
+* relaxes tests scenario, failing on some ARM arch
+
 ## 0.1.3 (2024-03-13)
 
 * no changes since `0.1.2`

@@ -31,8 +31,11 @@ default_section = "THIRDPARTY"
 no_strict_optional = "True"
 
 [tool.ruff]
+line-length = 90
+
+[tool.ruff.lint]
 select = [
-    "D1",  # pydocstyle errors
+    "D1", # pydocstyle errors
     "E",  # pycodestyle errors
     "W",  # pycodestyle warnings
     "F",  # flake8
@@ -44,3 +47,6 @@ ignore = [
     "B008",  # do not perform function calls in argument defaults
     "B905",  # ignore zip() without an explicit strict= parameter, only support with python >3.10
 ]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 14
