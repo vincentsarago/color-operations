@@ -100,5 +100,8 @@ setup(
             "colormath==2.0.2",
             "pytest-cov",
         ],
+        "dev": [
+            "pre-commit",
+        ],
     },
 )

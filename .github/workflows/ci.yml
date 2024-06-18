@@ -80,8 +80,8 @@ jobs:
           CIBW_SKIP: 'cp27* cp35* pp* *-win32 *-manylinux_i686 *musllinux*'
           CIBW_ARCHS_MACOS: x86_64 arm64 universal2
           CIBW_ARCHS_LINUX: auto aarch64
-          # CIBW_TEST_REQUIRES: pytest colormath==2.0.2
-          # CIBW_TEST_COMMAND: python -m pytest {project}/tests -v -s
+          CIBW_TEST_REQUIRES: pytest colormath==2.0.2
+          CIBW_TEST_COMMAND: python -m pytest {project}/tests -v -s
 
       - uses: actions/upload-artifact@v3
         with:
@@ -120,7 +120,7 @@ jobs:
           name: artifact
           path: dist
 
-      - uses: pypa/gh-action-pypi-publish@master
+      - uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: ${{ secrets.PYPI_USERNAME }}
           password: ${{ secrets.PYPI_PASSWORD }}
