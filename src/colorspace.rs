@@ -1,4 +1,5 @@
 use lazy_static::lazy_static;
+use pyo3::exceptions::PyValueError;
 use pyo3::prelude::*;
 
 // Constants
@@ -508,7 +509,6 @@ impl From<LUVColor> for LCHColor {
     }
 }
 
-#[pyclass]
 #[allow(non_camel_case_types)]
 #[derive(Copy, Clone, Debug)]
 pub enum ColorSpace {
@@ -517,6 +517,23 @@ pub enum ColorSpace {
     lab = 2,
     lch = 3,
     luv = 4,
+}
+
+impl<'py> FromPyObject<'py> for ColorSpace {
+    fn extract_bound(ob: &Bound<'py, PyAny>) -> PyResult<Self> {
+        let val: i64 = ob.extract()?;
+        match val {
+            0 => Ok(ColorSpace::rgb),
+            1 => Ok(ColorSpace::xyz),
+            2 => Ok(ColorSpace::lab),
+            3 => Ok(ColorSpace::lch),
+            4 => Ok(ColorSpace::luv),
+            _ => Err(PyValueError::new_err(format!(
+                "Unknown color enum value {}",
+                val
+            ))),
+        }
+    }
 }
 
 pub fn convert(c: (f64, f64, f64), src: ColorSpace, dst: ColorSpace) -> (f64, f64, f64) {

@@ -1,17 +1,11 @@
 from __future__ import annotations
 
-from enum import IntEnum
 from typing import Tuple
 
 import numpy as np
 from numpy.typing import NDArray
 
-class ColorSpace(IntEnum):
-    rgb = 0
-    xyz = 1
-    lab = 2
-    lch = 3
-    luv = 4
+from ._enums import ColorSpace
 
 def convert_arr(
     arr: NDArray[np.float64], src: ColorSpace, dst: ColorSpace
