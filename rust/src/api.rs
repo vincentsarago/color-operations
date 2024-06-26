@@ -149,5 +149,8 @@ pub fn saturate_rgb<'py>(
 #[pymodule]
 pub fn color_operations(_py: Python, m: &Bound<PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(saturate_rgb, m)?)?;
+    m.add_function(wrap_pyfunction!(convert, m)?)?;
+    m.add_function(wrap_pyfunction!(convert_arr, m)?)?;
+    m.add_class::<ColorSpace>()?;
     Ok(())
 }
