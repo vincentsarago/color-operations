@@ -1,3 +1,5 @@
+/target
+
 # Generated C files from cython
 *.c
 
