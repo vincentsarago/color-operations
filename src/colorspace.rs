@@ -350,7 +350,7 @@ impl From<XYZColor> for LUVColor {
         let l = if y <= *T0 {
             *KAPPA * y
         } else {
-            (116. * (y * THIRD)) - 16.
+            (116. * (y.powf(THIRD))) - 16.
         };
 
         let u = 13. * l * (uprime - UPRIME_N);
@@ -549,18 +549,22 @@ pub fn convert(c: (f64, f64, f64), src: ColorSpace, dst: ColorSpace) -> (f64, f6
         (rgb, lch) => LCHColor::from(RGBColor::from(c)).into(),
         (rgb, xyz) => XYZColor::from(RGBColor::from(c)).into(),
         (rgb, luv) => LUVColor::from(RGBColor::from(c)).into(),
+
         (xyz, lab) => LABColor::from(XYZColor::from(c)).into(),
         (xyz, lch) => LCHColor::from(XYZColor::from(c)).into(),
         (xyz, rgb) => RGBColor::from(XYZColor::from(c)).into(),
         (xyz, luv) => LUVColor::from(XYZColor::from(c)).into(),
+
         (lab, xyz) => XYZColor::from(LABColor::from(c)).into(),
         (lab, lch) => LCHColor::from(LABColor::from(c)).into(),
         (lab, rgb) => RGBColor::from(LABColor::from(c)).into(),
         (lab, luv) => LUVColor::from(LABColor::from(c)).into(),
+
         (lch, lab) => LABColor::from(LCHColor::from(c)).into(),
         (lch, xyz) => XYZColor::from(LCHColor::from(c)).into(),
         (lch, rgb) => RGBColor::from(LCHColor::from(c)).into(),
         (lch, luv) => LUVColor::from(LCHColor::from(c)).into(),
+
         (luv, lab) => LABColor::from(LUVColor::from(c)).into(),
         (luv, xyz) => XYZColor::from(LUVColor::from(c)).into(),
         (luv, rgb) => RGBColor::from(LUVColor::from(c)).into(),
