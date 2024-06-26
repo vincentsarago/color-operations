@@ -11,6 +11,9 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
+# This version overwrites the version in Cargo.toml, so ideally we wouldn't have
+# a version identifier here, but pre-commit fails without it.
+version = "0.2.0"
 
 [tool.maturin]
 features = ["pyo3/extension-module"]
@@ -26,7 +29,7 @@ exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
 
 [tool.isort]
 profile = "black"
-known_first_party = ["tipg"]
+known_first_party = ["tipg", "color_operations"]
 known_third_party = ["geojson_pydantic", "buildpg", "pydantic"]
 forced_separate = ["fastapi", "starlette"]
 default_section = "THIRDPARTY"

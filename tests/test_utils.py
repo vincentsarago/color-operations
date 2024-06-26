@@ -24,12 +24,7 @@
 import numpy as np
 import pytest
 
-from color_operations.utils import (
-    magick_to_rio,
-    math_type,
-    scale_dtype,
-    to_math_type,
-)
+from color_operations.utils import magick_to_rio, math_type, scale_dtype, to_math_type
 
 
 @pytest.fixture
