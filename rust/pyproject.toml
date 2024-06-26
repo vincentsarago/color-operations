@@ -4,7 +4,8 @@ build-backend = "maturin"
 
 [project]
 name = "color-operations"
-requires-python = ">=3.7"
+requires-python = ">=3.8"
+dependencies = ["numpy"]
 classifiers = [
     "Programming Language :: Rust",
     "Programming Language :: Python :: Implementation :: CPython",
@@ -14,3 +15,5 @@ classifiers = [
 
 [tool.maturin]
 features = ["pyo3/extension-module"]
+module-name = "color_operations._rust"
+python-source = "python"
