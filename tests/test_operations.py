@@ -37,7 +37,6 @@ from color_operations.utils import to_math_type
 
 @pytest.fixture
 def arr():
-
     return to_math_type(
         np.array(
             [

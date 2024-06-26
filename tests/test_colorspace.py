@@ -79,7 +79,6 @@ def test_fixtures(pair):
 
 
 def _near(a, b, tol):
-
     if not isinstance(tol, Iterable):
         tol = [tol] * len(a)
 
@@ -98,7 +97,7 @@ def _make_array(x, y, z, dtype="float64"):
 def test_rgb2lch(pair):
     rgb, lch = pair
     alch = convert(*rgb, src=cs.rgb, dst=cs.lch)
-    assert alch[0] >= 0
+    assert round(alch[0], 8) >= 0
     assert _near(alch, lch, (1.0, 1.0, 0.25))
 
 
@@ -203,13 +202,13 @@ def test_array_bad_colorspace():
 
 def test_bad_colorspace_string():
     """String colorspaces raise ValueError"""
-    with pytest.raises(TypeError):
+    with pytest.raises(ValueError):
         convert(0.1, 0.1, 0.1, src="FOO", dst="RGB")
 
 
 def test_bad_colorspace_invalid_int():
     """Invalid colorspace integers raise ValueError"""
-    with pytest.raises(TypeError):
+    with pytest.raises(ValueError):
         convert(0.1, 0.1, 0.1, src=999, dst=999)
 
 

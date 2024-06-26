@@ -79,6 +79,7 @@ setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Topic :: Multimedia :: Graphics :: Graphics Conversion",
         "Topic :: Scientific/Engineering :: GIS",
     ],
@@ -90,7 +91,7 @@ setup(
     packages=find_packages(exclude=["tests"]),
     include_package_data=True,
     zip_safe=False,
-    install_requires=["numpy"],
+    install_requires=["numpy~=1.0"],
     ext_modules=ext_modules,
     include_dirs=include_dirs,
     extras_require={
@@ -98,6 +99,9 @@ setup(
             "pytest",
             "colormath==2.0.2",
             "pytest-cov",
+        ],
+        "dev": [
+            "pre-commit",
         ],
     },
 )

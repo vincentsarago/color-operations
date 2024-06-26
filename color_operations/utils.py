@@ -60,7 +60,6 @@ def magick_to_operations(convert_opts):  # noqa: C901
 
     """
     ops = []
-    bands = None
 
     def set_band(x):
         global bands

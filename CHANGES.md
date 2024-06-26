@@ -1,4 +1,17 @@
 
+## 0.1.4 (2024-06-18)
+
+* limit numpy to **~1.0**
+* relaxes tests scenario, failing on some ARM arch
+
+## 0.1.3 (2024-03-13)
+
+* no changes since `0.1.2`
+
+## 0.1.2 (2023-12-18)
+
+* add python 3.12 support (author @mentaljam, https://github.com/vincentsarago/color-operations/pull/5)
+
 ## 0.1.1 (2023-04-05)
 
 * remove `.c` file from package
