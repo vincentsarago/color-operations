@@ -171,45 +171,49 @@ def test_bad_array_bands():
 
 def test_bad_array_dims():
     bad = np.random.random((3, 3))
-    with pytest.raises(ValueError) as exc:
+    with pytest.raises(TypeError) as exc:
         saturate_rgb(bad, 1.1)
-    assert "wrong number of dimensions" in str(exc.value)
+    assert "cannot be converted" in str(exc.value)
 
-    with pytest.raises(ValueError) as exc:
+    with pytest.raises(TypeError) as exc:
         convert_arr(bad, cs.rgb, cs.lch)
-    assert "wrong number of dimensions" in str(exc.value)
+    assert "cannot be converted" in str(exc.value)
 
 
 def test_bad_array_type():
     bad = np.random.random((3, 3, 3)).astype("uint8")
-    with pytest.raises(ValueError) as exc:
+    with pytest.raises(TypeError) as exc:
         saturate_rgb(bad, 1.1)
-    assert "dtype mismatch" in str(exc.value)
+    assert "cannot be converted" in str(exc.value)
 
-    with pytest.raises(ValueError) as exc:
+    with pytest.raises(TypeError) as exc:
         convert_arr(bad, cs.rgb, cs.lch)
-    assert "dtype mismatch" in str(exc.value)
+    assert "cannot be converted" in str(exc.value)
 
 
 def test_array_bad_colorspace():
-    arr = np.random.random((3, 3))
-    with pytest.raises(ValueError):
-        convert_arr(arr, src="FOO", dst="RGB")
+    rgb = _make_array(0.392156, 0.776470, 0.164705)
+    with pytest.raises(TypeError) as exc:
+        convert_arr(rgb, src="FOO", dst="RGB")
+    assert "'str' object cannot be interpreted as an integer" in str(exc.value)
 
-    with pytest.raises(ValueError):
-        convert_arr(arr, src=999, dst=999)
+    with pytest.raises(ValueError) as exc:
+        convert_arr(rgb, src=999, dst=999)
+    assert "Unknown color enum value 999" in str(exc.value)
 
 
 def test_bad_colorspace_string():
     """String colorspaces raise ValueError"""
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError) as exc:
         convert(0.1, 0.1, 0.1, src="FOO", dst="RGB")
+    assert "'str' object cannot be interpreted as an integer" in str(exc.value)
 
 
 def test_bad_colorspace_invalid_int():
     """Invalid colorspace integers raise ValueError"""
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError) as exc:
         convert(0.1, 0.1, 0.1, src=999, dst=999)
+    assert "Unknown color enum value 999" in str(exc.value)
 
 
 def test_bad_colorspace_invalid_enum():
