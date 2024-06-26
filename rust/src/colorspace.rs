@@ -15,11 +15,11 @@ lazy_static! {
 const THIRD: f64 = 1.0 / 3.;
 const GAMMA: f64 = 2.2;
 const XN: f64 = 0.95047;
-// const YN: f64 = 1.0;
+const YN: f64 = 1.0;
 const ZN: f64 = 1.08883;
-// const DENOM_N: f64 = XN + (15. * YN) + (3. * ZN);
-// const UPRIME_N: f64 = (4. * XN) / DENOM_N;
-// const VPRIME_N: f64 = (9. * YN) / DENOM_N;
+const DENOM_N: f64 = XN + (15. * YN) + (3. * ZN);
+const UPRIME_N: f64 = (4. * XN) / DENOM_N;
+const VPRIME_N: f64 = (9. * YN) / DENOM_N;
 
 /// Compile time option to use
 /// sRGB companding (default, True) or simplified gamma (False)
@@ -30,27 +30,45 @@ const SRGB_COMPAND: bool = true;
 
 /// A color with three values
 #[derive(Clone, Copy, Debug)]
-pub struct Color {
-    pub one: f64,
-    pub two: f64,
-    pub three: f64,
+pub enum Color {
+    RGB(RGBColor),
+    XYZ(XYZColor),
+    LAB(LABColor),
+    LCH(LCHColor),
+    LUV(LUVColor),
 }
 
 impl Color {
-    pub fn new(one: f64, two: f64, three: f64) -> Self {
-        Color { one, two, three }
+    pub fn new_rgb(r: f64, g: f64, b: f64) -> Self {
+        Self::RGB((r, g, b).into())
+    }
+
+    pub fn new_xyz(x: f64, y: f64, z: f64) -> Self {
+        Self::XYZ((x, y, z).into())
+    }
+
+    pub fn new_lab(l: f64, a: f64, b: f64) -> Self {
+        Self::LAB((l, a, b).into())
+    }
+
+    pub fn new_lch(l: f64, c: f64, h: f64) -> Self {
+        Self::LCH((l, c, h).into())
+    }
+
+    pub fn new_luv(l: f64, u: f64, v: f64) -> Self {
+        Self::LUV((l, u, v).into())
     }
 }
 
 impl From<Color> for (f64, f64, f64) {
     fn from(value: Color) -> Self {
-        (value.one, value.two, value.three)
-    }
-}
-
-impl From<(f64, f64, f64)> for Color {
-    fn from(value: (f64, f64, f64)) -> Self {
-        Color::new(value.0, value.1, value.2)
+        match value {
+            Color::RGB(c) => c.into(),
+            Color::XYZ(c) => c.into(),
+            Color::LAB(c) => c.into(),
+            Color::LCH(c) => c.into(),
+            Color::LUV(c) => c.into(),
+        }
     }
 }
 
@@ -63,9 +81,21 @@ pub enum ColorSpace {
 /// A Color defined by Red, Green, Blue
 #[derive(Clone, Copy, Debug)]
 pub struct RGBColor {
-    pub red: f64,
-    pub green: f64,
-    pub blue: f64,
+    pub r: f64,
+    pub g: f64,
+    pub b: f64,
+}
+
+impl From<(f64, f64, f64)> for RGBColor {
+    fn from((r, g, b): (f64, f64, f64)) -> Self {
+        RGBColor { r, g, b }
+    }
+}
+
+impl From<RGBColor> for (f64, f64, f64) {
+    fn from(value: RGBColor) -> Self {
+        (value.r, value.g, value.b)
+    }
 }
 
 /// A Color defined by X, Y, Z
@@ -76,11 +106,101 @@ pub struct XYZColor {
     pub z: f64,
 }
 
-impl From<RGBColor> for XYZColor {
+impl From<(f64, f64, f64)> for XYZColor {
+    fn from((x, y, z): (f64, f64, f64)) -> Self {
+        XYZColor { x, y, z }
+    }
+}
+
+impl From<XYZColor> for (f64, f64, f64) {
+    fn from(value: XYZColor) -> Self {
+        (value.x, value.y, value.z)
+    }
+}
+
+/// A Color defined by LAB
+#[derive(Clone, Copy, Debug)]
+pub struct LABColor {
+    pub l: f64,
+    pub a: f64,
+    pub b: f64,
+}
+
+impl From<(f64, f64, f64)> for LABColor {
+    fn from((l, a, b): (f64, f64, f64)) -> Self {
+        LABColor { l, a, b }
+    }
+}
+
+impl From<LABColor> for (f64, f64, f64) {
+    fn from(value: LABColor) -> Self {
+        (value.l, value.a, value.b)
+    }
+}
+
+/// A Color defined by LCH
+#[derive(Clone, Copy, Debug)]
+pub struct LCHColor {
+    pub l: f64,
+    pub c: f64,
+    pub h: f64,
+}
+
+impl From<(f64, f64, f64)> for LCHColor {
+    fn from((l, c, h): (f64, f64, f64)) -> Self {
+        LCHColor { l, c, h }
+    }
+}
+
+impl From<LCHColor> for (f64, f64, f64) {
+    fn from(value: LCHColor) -> Self {
+        (value.l, value.c, value.h)
+    }
+}
+
+/// A Color defined by LUV
+#[derive(Clone, Copy, Debug)]
+pub struct LUVColor {
+    pub l: f64,
+    pub u: f64,
+    pub v: f64,
+}
+
+impl From<(f64, f64, f64)> for LUVColor {
+    fn from((l, u, v): (f64, f64, f64)) -> Self {
+        LUVColor { l, u, v }
+    }
+}
+
+impl From<LUVColor> for (f64, f64, f64) {
+    fn from(value: LUVColor) -> Self {
+        (value.l, value.u, value.v)
+    }
+}
+
+// Color space transformations
+
+impl From<RGBColor> for LABColor {
     fn from(value: RGBColor) -> Self {
-        let r = value.red;
-        let g = value.green;
-        let b = value.blue;
+        let c: XYZColor = value.into();
+        c.into()
+    }
+}
+
+impl From<RGBColor> for LCHColor {
+    fn from(value: RGBColor) -> Self {
+        let c1: XYZColor = value.into();
+        let c2: LABColor = c1.into();
+        c2.into()
+    }
+}
+
+impl From<RGBColor> for XYZColor {
+    #[inline(always)]
+    fn from(value: RGBColor) -> Self {
+        let r = value.r;
+        let g = value.g;
+        let b = value.b;
 
         // Convert RGB to linear scale
         let (rl, gl, bl) = if SRGB_COMPAND {
@@ -118,6 +238,280 @@ impl From<RGBColor> for XYZColor {
     }
 }
 
+impl From<RGBColor> for LUVColor {
+    fn from(value: RGBColor) -> Self {
+        let c1: XYZColor = value.into();
+        c1.into()
+    }
+}
+
+impl From<XYZColor> for LABColor {
+    #[inline(always)]
+    fn from(value: XYZColor) -> Self {
+        let x = value.x;
+        let y = value.y;
+        let z = value.z;
+
+        // convert XYZ to LAB colorspace
+
+        let fx = if x > *T0 {
+            x.powf(THIRD)
+        } else {
+            (*ALPHA * x) + BINTERCEPT
+        };
+
+        let fy = if y > *T0 {
+            y.powf(THIRD)
+        } else {
+            (*ALPHA * y) + BINTERCEPT
+        };
+
+        let fz = if z > *T0 {
+            z.powf(THIRD)
+        } else {
+            (*ALPHA * z) + BINTERCEPT
+        };
+
+        let l = (116. * fy) - 16.;
+        let a = 500. * (fx - fy);
+        let b = 200. * (fy - fz);
+
+        Self { l, a, b }
+    }
+}
+
+impl From<XYZColor> for LCHColor {
+    fn from(value: XYZColor) -> Self {
+        let c1: LABColor = value.into();
+        c1.into()
+    }
+}
+
+impl From<XYZColor> for RGBColor {
+    #[inline(always)]
+    fn from(value: XYZColor) -> Self {
+        let x = value.x;
+        let y = value.y;
+        let z = value.z;
+
+        // uses reference white d65
+        let x = x * XN;
+        let z = z * ZN;
+
+        // XYZ to sRGB
+        // expanded matrix multiplication
+        let rlin = (x * 3.2404542) + (y * -1.5371385) + (z * -0.4985314);
+        let glin = (x * -0.9692660) + (y * 1.8760108) + (z * 0.0415560);
+        let blin = (x * 0.0556434) + (y * -0.2040259) + (z * 1.0572252);
+
+        let (r, g, b) = if SRGB_COMPAND {
+            let r = if rlin <= 0.0031308 {
+                12.92 * rlin
+            } else {
+                (1.055 * (rlin.powf(1. / 2.4))) - 0.055
+            };
+            let g = if glin <= 0.0031308 {
+                12.92 * glin
+            } else {
+                (1.055 * (glin.powf(1. / 2.4))) - 0.055
+            };
+            let b = if blin <= 0.0031308 {
+                12.92 * blin
+            } else {
+                (1.055 * (blin.powf(1. / 2.4))) - 0.055
+            };
+            (r, g, b)
+        } else {
+            // Use simplified sRGB
+            let r = rlin.powf(1. / GAMMA);
+            let g = glin.powf(1. / GAMMA);
+            let b = blin.powf(1. / GAMMA);
+            (r, g, b)
+        };
+
+        // constrain to 0..1 to deal with any float drift
+        let r = r.clamp(0.0, 1.0);
+        let g = g.clamp(0.0, 1.0);
+        let b = b.clamp(0.0, 1.0);
+
+        Self { r, g, b }
+    }
+}
+
+impl From<XYZColor> for LUVColor {
+    fn from(value: XYZColor) -> Self {
+        let x = value.x;
+        let y = value.y;
+        let z = value.z;
+
+        let denom = x + (15. * y) + (3. * z);
+        let uprime = (4. * x) / denom;
+        let vprime = (9. * y) / denom;
+
+        let y = y / YN;
+
+        let l = if y <= *T0 {
+            *KAPPA * y
+        } else {
+            (116. * (y * THIRD)) - 16.
+        };
+
+        let u = 13. * l * (uprime - UPRIME_N);
+        let v = 13. * l * (vprime - VPRIME_N);
+        Self { l, u, v }
+    }
+}
+
+impl From<LABColor> for XYZColor {
+    #[inline(always)]
+    fn from(value: LABColor) -> Self {
+        let l = value.l;
+        let a = value.a;
+        let b = value.b;
+
+        let tx = ((l + 16.) / 116.0) + (a / 500.0);
+        let x = if tx > DELTA {
+            tx.powi(3)
+        } else {
+            3. * DELTA * DELTA * (tx - BINTERCEPT)
+        };
+
+        let ty = (l + 16.) / 116.0;
+        let y = if ty > DELTA {
+            ty.powi(3)
+        } else {
+            3. * DELTA * DELTA * (ty - BINTERCEPT)
+        };
+
+        let tz = ((l + 16.) / 116.0) - (b / 200.0);
+        let z = if tz > DELTA {
+            tz.powi(3)
+        } else {
+            3. * DELTA * DELTA * (tz - BINTERCEPT)
+        };
+
+        // Reference illuminant
+        Self { x, y, z }
+    }
+}
+
+impl From<LABColor> for LCHColor {
+    #[inline(always)]
+    fn from(value: LABColor) -> Self {
+        let l = value.l;
+        let a = value.a;
+        let b = value.b;
+
+        let c = ((a * a) + (b * b)).powf(0.5);
+        let h = b.atan2(a);
+        Self { l, c, h }
+    }
+}
+
+impl From<LABColor> for RGBColor {
+    fn from(value: LABColor) -> Self {
+        let c1: XYZColor = value.into();
+        c1.into()
+    }
+}
+
+impl From<LABColor> for LUVColor {
+    fn from(value: LABColor) -> Self {
+        let c1: XYZColor = value.into();
+        c1.into()
+    }
+}
+
+impl From<LCHColor> for LABColor {
+    #[inline(always)]
+    fn from(value: LCHColor) -> Self {
+        let l = value.l;
+        let c = value.c;
+        let h = value.h;
+
+        let a = c * h.cos();
+        let b = c * h.sin();
+
+        Self { l, a, b }
+    }
+}
+
+impl From<LCHColor> for XYZColor {
+    fn from(value: LCHColor) -> Self {
+        let c1: LABColor = value.into();
+        c1.into()
+    }
+}
+
+impl From<LCHColor> for RGBColor {
+    #[inline(always)]
+    fn from(value: LCHColor) -> Self {
+        let c1: LABColor = value.into();
+        let c2: XYZColor = c1.into();
+        c2.into()
+    }
+}
+
+impl From<LCHColor> for LUVColor {
+    fn from(value: LCHColor) -> Self {
+        let c1: LABColor = value.into();
+        let c2: XYZColor = c1.into();
+        c2.into()
+    }
+}
+
+impl From<LUVColor> for LABColor {
+    fn from(value: LUVColor) -> Self {
+        let c1: XYZColor = value.into();
+        c1.into()
+    }
+}
+
+impl From<LUVColor> for XYZColor {
+    fn from(value: LUVColor) -> Self {
+        let l = value.l;
+        let u = value.u;
+        let v = value.v;
+
+        if l == 0.0 {
+            return Self {
+                x: 0.,
+                y: 0.,
+                z: 0.,
+            };
+        }
+
+        let uprime = (u / (13. * l)) + UPRIME_N;
+        let vprime = (v / (13. * l)) + VPRIME_N;
+
+        let y = if l <= 8.0 {
+            l / *KAPPA
+        } else {
+            ((l + 16.) / 116.0).powf(3.)
+        };
+
+        let x = y * ((9. * uprime) / (4. * vprime));
+        let z = y * ((12. - (3. * uprime) - (20. * vprime)) / (4. * vprime));
+
+        Self { x, y, z }
+    }
+}
+
+impl From<LUVColor> for RGBColor {
+    fn from(value: LUVColor) -> Self {
+        let c1: XYZColor = value.into();
+        c1.into()
+    }
+}
+
+impl From<LUVColor> for LCHColor {
+    fn from(value: LUVColor) -> Self {
+        let c1: XYZColor = value.into();
+        let c2: LABColor = c1.into();
+        c2.into()
+    }
+}
+
 /// Convert a color from one color space to another
 pub fn convert(c: Color, src: ColorSpace, dst: ColorSpace) -> Color {
     match (src, dst) {
@@ -130,175 +524,6 @@ pub fn convert(c: Color, src: ColorSpace, dst: ColorSpace) -> Color {
         (ColorSpace::LCH, ColorSpace::LCH) => c,
         (ColorSpace::LCH, ColorSpace::RGB) => lch_to_rgb(c),
     }
-}
-
-#[inline(always)]
-fn rgb_to_xyz(c: Color) -> Color {
-    let (r, g, b) = c.into();
-
-    // Convert RGB to linear scale
-    let (rl, gl, bl) = if SRGB_COMPAND {
-        let rl = if r <= 0.04045 {
-            r / 12.92
-        } else {
-            ((r + 0.055) / 1.055).powf(2.4)
-        };
-
-        let gl = if g <= 0.04045 {
-            g / 12.92
-        } else {
-            ((g + 0.055) / 1.055).powf(2.4)
-        };
-
-        let bl = if b <= 0.04045 {
-            b / 12.92
-        } else {
-            ((b + 0.055) / 1.055).powf(2.4)
-        };
-
-        (rl, gl, bl)
-    } else {
-        // Use "simplified sRGB"
-        (r.powf(GAMMA), g.powf(GAMMA), b.powf(GAMMA))
-    };
-
-    // matrix mult for srgb->xyz,
-    // includes adjustment for reference white
-    let x = ((rl * 0.4124564) + (gl * 0.3575761) + (bl * 0.1804375)) / XN;
-    let y = (rl * 0.2126729) + (gl * 0.7151522) + (bl * 0.0721750);
-    let z = ((rl * 0.0193339) + (gl * 0.1191920) + (bl * 0.9503041)) / ZN;
-
-    (x, y, z).into()
-}
-
-#[inline(always)]
-fn xyz_to_lab(c: Color) -> Color {
-    let (x, y, z) = c.into();
-
-    // convert XYZ to LAB colorspace
-
-    let fx = if x > *T0 {
-        x.powf(THIRD)
-    } else {
-        (*ALPHA * x) + BINTERCEPT
-    };
-
-    let fy = if y > *T0 {
-        y.powf(THIRD)
-    } else {
-        (*ALPHA * y) + BINTERCEPT
-    };
-
-    let fz = if z > *T0 {
-        z.powf(THIRD)
-    } else {
-        (*ALPHA * z) + BINTERCEPT
-    };
-
-    let l = (116. * fy) - 16.;
-    let a = 500. * (fx - fy);
-    let b = 200. * (fy - fz);
-
-    (l, a, b).into()
-}
-
-#[inline(always)]
-fn lab_to_lch(c: Color) -> Color {
-    let (l, a, b) = c.into();
-    (l, ((a * a) + (b * b)).powf(0.5), b.atan2(a)).into()
-}
-
-#[inline(always)]
-fn lch_to_lab(c: Color) -> Color {
-    let (l, c, h) = c.into();
-
-    let a = c * h.cos();
-    let b = c * h.sin();
-
-    (l, a, b).into()
-}
-
-#[inline(always)]
-fn lab_to_xyz(c: Color) -> Color {
-    let (l, a, b) = c.into();
-
-    let tx = ((l + 16.) / 116.0) + (a / 500.0);
-    let x = if tx > DELTA {
-        tx.powi(3)
-    } else {
-        3. * DELTA * DELTA * (tx - BINTERCEPT)
-    };
-
-    let ty = (l + 16.) / 116.0;
-    let y = if ty > DELTA {
-        ty.powi(3)
-    } else {
-        3. * DELTA * DELTA * (ty - BINTERCEPT)
-    };
-
-    let tz = ((l + 16.) / 116.0) - (b / 200.0);
-    let z = if tz > DELTA {
-        tz.powi(3)
-    } else {
-        3. * DELTA * DELTA * (tz - BINTERCEPT)
-    };
-
-    // Reference illuminant
-    (x, y, z).into()
-}
-
-#[inline(always)]
-fn xyz_to_rgb(c: Color) -> Color {
-    let (x, y, z) = c.into();
-
-    // uses reference white d65
-    let x = x * XN;
-    let z = z * ZN;
-
-    // XYZ to sRGB
-    // expanded matrix multiplication
-    let rlin = (x * 3.2404542) + (y * -1.5371385) + (z * -0.4985314);
-    let glin = (x * -0.9692660) + (y * 1.8760108) + (z * 0.0415560);
-    let blin = (x * 0.0556434) + (y * -0.2040259) + (z * 1.0572252);
-
-    let (r, g, b) = if SRGB_COMPAND {
-        let r = if rlin <= 0.0031308 {
-            12.92 * rlin
-        } else {
-            (1.055 * (rlin.powf(1. / 2.4))) - 0.055
-        };
-        let g = if glin <= 0.0031308 {
-            12.92 * glin
-        } else {
-            (1.055 * (glin.powf(1. / 2.4))) - 0.055
-        };
-        let b = if blin <= 0.0031308 {
-            12.92 * blin
-        } else {
-            (1.055 * (blin.powf(1. / 2.4))) - 0.055
-        };
-        (r, g, b)
-    } else {
-        // Use simplified sRGB
-        let r = rlin.powf(1. / GAMMA);
-        let g = glin.powf(1. / GAMMA);
-        let b = blin.powf(1. / GAMMA);
-        (r, g, b)
-    };
-
-    // constrain to 0..1 to deal with any float drift
-    let r = r.clamp(0.0, 1.0);
-    let g = g.clamp(0.0, 1.0);
-    let b = b.clamp(0.0, 1.0);
-
-    (r, g, b).into()
-}
-
-/// Convert LCH color to RGB color
-fn lch_to_rgb(c: Color) -> Color {
-    let c = lch_to_lab(c);
-    let c = lab_to_xyz(c);
-    xyz_to_rgb(c)
 }
 
 #[cfg(test)]
