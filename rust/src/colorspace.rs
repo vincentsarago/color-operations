@@ -74,8 +74,11 @@ impl From<Color> for (f64, f64, f64) {
 
 #[allow(clippy::upper_case_acronyms)]
 pub enum ColorSpace {
-    RGB,
-    LCH,
+    RGB = 0,
+    XYZ = 1,
+    LAB = 2,
+    LCH = 3,
+    LUV = 4,
 }
 
 /// A Color defined by Red, Green, Blue
