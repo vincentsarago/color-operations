@@ -2,51 +2,8 @@ use numpy::ndarray::Array3;
 use pyo3::exceptions::PyValueError;
 use pyo3::prelude::*;
 
-use crate::colorspace::{LABColor, LCHColor, LUVColor, RGBColor, XYZColor};
+use crate::colorspace::{ColorSpace, LCHColor, RGBColor};
 use numpy::{IntoPyArray, PyArray3, PyReadonlyArray3};
-
-#[pyclass]
-#[allow(non_camel_case_types)]
-#[derive(Copy, Clone, Debug)]
-enum ColorSpace {
-    rgb = 0,
-    xyz = 1,
-    lab = 2,
-    lch = 3,
-    luv = 4,
-}
-
-fn _convert(c: (f64, f64, f64), src: ColorSpace, dst: ColorSpace) -> (f64, f64, f64) {
-    use ColorSpace::*;
-    match (src, dst) {
-        (rgb, rgb) => c,
-        (xyz, xyz) => c,
-        (lab, lab) => c,
-        (lch, lch) => c,
-        (luv, luv) => c,
-
-        (rgb, lab) => LABColor::from(RGBColor::from(c)).into(),
-        (rgb, lch) => LCHColor::from(RGBColor::from(c)).into(),
-        (rgb, xyz) => XYZColor::from(RGBColor::from(c)).into(),
-        (rgb, luv) => LUVColor::from(RGBColor::from(c)).into(),
-        (xyz, lab) => LABColor::from(XYZColor::from(c)).into(),
-        (xyz, lch) => LCHColor::from(XYZColor::from(c)).into(),
-        (xyz, rgb) => RGBColor::from(XYZColor::from(c)).into(),
-        (xyz, luv) => LUVColor::from(XYZColor::from(c)).into(),
-        (lab, xyz) => XYZColor::from(LABColor::from(c)).into(),
-        (lab, lch) => LCHColor::from(LABColor::from(c)).into(),
-        (lab, rgb) => RGBColor::from(LABColor::from(c)).into(),
-        (lab, luv) => LUVColor::from(LABColor::from(c)).into(),
-        (lch, lab) => LABColor::from(LCHColor::from(c)).into(),
-        (lch, xyz) => XYZColor::from(LCHColor::from(c)).into(),
-        (lch, rgb) => RGBColor::from(LCHColor::from(c)).into(),
-        (lch, luv) => LUVColor::from(LCHColor::from(c)).into(),
-        (luv, lab) => LABColor::from(LUVColor::from(c)).into(),
-        (luv, xyz) => XYZColor::from(LUVColor::from(c)).into(),
-        (luv, rgb) => RGBColor::from(LUVColor::from(c)).into(),
-        (luv, lch) => LCHColor::from(LUVColor::from(c)).into(),
-    }
-}
 
 #[pyfunction]
 pub fn convert_arr<'py>(
@@ -74,7 +31,7 @@ pub fn convert_arr<'py>(
                 let c2 = arr[(1, i, j)];
                 let c3 = arr[(2, i, j)];
 
-                let converted = _convert((c1, c2, c3), src, dst);
+                let converted = crate::colorspace::convert((c1, c2, c3), src, dst);
 
                 out[(0, i, j)] = converted.0;
                 out[(1, i, j)] = converted.1;
@@ -89,14 +46,14 @@ pub fn convert_arr<'py>(
 }
 
 #[pyfunction]
-pub fn convert<'py>(
+pub fn convert(
     one: f64,
     two: f64,
     three: f64,
     src: ColorSpace,
     dst: ColorSpace,
 ) -> (f64, f64, f64) {
-    _convert((one, two, three), src, dst)
+    crate::colorspace::convert((one, two, three), src, dst)
 }
 
 /// Convert array of RGB -> LCH, adjust saturation, back to RGB
