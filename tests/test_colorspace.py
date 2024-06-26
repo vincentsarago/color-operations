@@ -173,22 +173,22 @@ def test_bad_array_dims():
     bad = np.random.random((3, 3))
     with pytest.raises(TypeError) as exc:
         saturate_rgb(bad, 1.1)
-    assert "cannot_be_converted" in str(exc.value)
+    assert "cannot be converted" in str(exc.value)
 
     with pytest.raises(TypeError) as exc:
         convert_arr(bad, cs.rgb, cs.lch)
-    assert "cannot_be_converted" in str(exc.value)
+    assert "cannot be converted" in str(exc.value)
 
 
 def test_bad_array_type():
     bad = np.random.random((3, 3, 3)).astype("uint8")
-    with pytest.raises(ValueError) as exc:
+    with pytest.raises(TypeError) as exc:
         saturate_rgb(bad, 1.1)
-    assert "dtype mismatch" in str(exc.value)
+    assert "cannot be converted" in str(exc.value)
 
-    with pytest.raises(ValueError) as exc:
+    with pytest.raises(TypeError) as exc:
         convert_arr(bad, cs.rgb, cs.lch)
-    assert "dtype mismatch" in str(exc.value)
+    assert "cannot be converted" in str(exc.value)
 
 
 def test_array_bad_colorspace():
