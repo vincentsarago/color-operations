@@ -3,7 +3,8 @@ requires = [
   "setuptools",
   "wheel",
   "cython>=0.29.32",
-  "oldest-supported-numpy",
+  "numpy==2.0.0; python_version >= '3.9'",
+  "oldest-supported-numpy; python_version < '3.9'"
 ]
 
 [tool.coverage.run]
