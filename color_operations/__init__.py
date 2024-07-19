@@ -1,4 +1,4 @@
-"""color-ops"""
+"""color-operations"""
 
 from .operations import gamma, parse_operations, saturation, sigmoidal
 from .utils import magick_to_operations, scale_dtype, to_math_type

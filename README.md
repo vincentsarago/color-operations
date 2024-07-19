@@ -1,4 +1,4 @@
-# color-operations
+# color-operations (fork of [**rio-color**](https://github.com/mapbox/rio-color) )
 
 <p align="center">
   <p align="center">Apply basic color-oriented image operations.</p>
@@ -19,15 +19,15 @@
   </a>
 </p>
 
-Lightweight version of [**rio-color**](https://github.com/mapbox/rio-color) but removing rasterio dependency.
+Modified version of Mapbox's [**rio-color**](https://github.com/mapbox/rio-color), removing rasterio dependency and with python>=3.10 compatibility.
 
 ## Install
 
 You can install color-operations using pip
 
 ```
-pip install -U pip
-pip install color-operations
+python -m pip install -U pip
+python -m pip install color-operations
 ```
 
 Build from source
@@ -35,8 +35,8 @@ Build from source
 ```
 git checkout https://github.com/vincentsarago/color-operations.git
 cd color-operations
-pip install -U pip
-pip install -e .
+python -m pip install -U pip
+python -m pip install -e .
 ```
 
 ## Operations
@@ -79,7 +79,6 @@ Blue
 #### Saturation
 
 ![saturation](img/saturation.jpg)
-
 
 #### Combinations of operations
 
