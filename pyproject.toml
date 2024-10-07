@@ -3,7 +3,7 @@ requires = [
   "setuptools",
   "wheel",
   "cython>=0.29.32",
-  "numpy==2.0.0; python_version >= '3.9'",
+  "numpy>=2.0; python_version >= '3.9'",
   "oldest-supported-numpy; python_version < '3.9'"
 ]
 
@@ -51,3 +51,18 @@ ignore = [
 
 [tool.ruff.lint.mccabe]
 max-complexity = 14
+
+
+[tool.bumpversion]
+current_version = "0.1.5"
+search = "{current_version}"
+replace = "{new_version}"
+regex = false
+tag = true
+commit = true
+tag_name = "{new_version}"
+
+[[tool.bumpversion.files]]
+filename = "color_operations/__init__.py"
+search = '__version__ = "{current_version}"'
+replace = '__version__ = "{new_version}"'

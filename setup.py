@@ -104,6 +104,7 @@ setup(
         ],
         "dev": [
             "pre-commit",
+            "bump-my-version",
         ],
     },
 )
