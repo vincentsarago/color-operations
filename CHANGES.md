@@ -1,4 +1,8 @@
 
+## 0.1.6 (2024-10-07)
+
+* update numpy version in build-system
+
 ## 0.1.5 (2024-06-26)
 
 * add **numpy 2.0** build
