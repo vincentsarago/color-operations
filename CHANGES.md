@@ -1,4 +1,9 @@
 
+## 0.2.0 (2025-03-27)
+
+* drop python 3.8 support
+* add python 3.13 support
+
 ## 0.1.6 (2024-10-07)
 
 * update numpy version in build-system
