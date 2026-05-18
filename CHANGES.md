@@ -1,4 +1,9 @@
 
+## 0.3.0 (2026-05-18)
+
+* drop python 3.9 and 3.10 support
+* add python 3.14 support
+
 ## 0.2.0 (2025-03-27)
 
 * drop python 3.8 support

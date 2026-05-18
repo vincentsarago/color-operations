@@ -17,20 +17,17 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - {name: Windows, python: '3.13', os: windows-2019}
-          - {name: Mac, python: '3.13', os: macos-latest}
-          - {name: 'Ubuntu', python: '3.13', os: ubuntu-latest}
-          - {name: '3.14', python: '3.14', os: ubuntu-latest}
+          - {name: Windows, python: '3.14', os: windows-latest}
+          - {name: Mac, python: '3.14', os: macos-latest}
+          - {name: 'Ubuntu', python: '3.14', os: ubuntu-latest}
           - {name: '3.13', python: '3.13', os: ubuntu-latest}
           - {name: '3.12', python: '3.12', os: ubuntu-latest}
           - {name: '3.11', python: '3.11', os: ubuntu-latest}
-          - {name: '3.10', python: '3.10', os: ubuntu-latest}
-          - {name: '3.9', python: '3.9', os: ubuntu-latest}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: Set up Python ${{ matrix.python }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
         with:
           python-version: ${{ matrix.python }}
       - name: Install dependencies
@@ -51,12 +48,12 @@ jobs:
 
       - name: Upload Results
         if: ${{ matrix.name == 'Ubuntu' }}
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@57e3a136b779b570ffcdbf80b3bdc90e7fab3de2 # v6.0.0
         with:
-          file: ./coverage.xml
+          files: ./coverage.xml
           flags: unittests
-          name: ${{ matrix.python }}
           fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   source_distribution:
     if: startsWith(github.event.ref, 'refs/tags') || github.event_name == 'release'
@@ -65,12 +62,12 @@ jobs:
     name: Build source distribution
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
         name: Install Python
         with:
-          python-version: '3.13'
+          python-version: '3.14'
 
       - name: Install dependencies
         run: |
@@ -80,7 +77,7 @@ jobs:
         run: python -m build
 
       - name: Store the distribution packages
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: python-package-distributions
           path: dist/*.tar.gz
@@ -96,15 +93,15 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-2019, macos-latest]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
 
       - name: Set up QEMU
         if: runner.os == 'Linux'
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@ce360397dd3f832beb865e1373c09c0e9f86d70a # v4
         with:
           platforms: arm64
 
-      - uses: pypa/cibuildwheel@v2.23.2
+      - uses: pypa/cibuildwheel@d04cacbc9866d432033b1d09142936e6a0e2121a # v2.23.2
         env:
           # https://github.com/mapbox/rio-color/blob/0ab59ad8e2db99ad1d0c8bd8c2e4cf8d0c3114cf/appveyor.yml#L3
           CIBW_SKIP: 'cp27* cp35* pp* *-win32 *-manylinux_i686 *musllinux*'
@@ -113,7 +110,7 @@ jobs:
           # CIBW_TEST_REQUIRES: pytest colormath==2.0.2
           # CIBW_TEST_COMMAND: python -m pytest {project}/tests
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: wheels-${{ matrix.os }}-${{ strategy.job-index }}
           path: ./wheelhouse/*.whl
@@ -132,13 +129,13 @@ jobs:
       id-token: write
     steps:
       - name: Download all the dists
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
           path: dist
           merge-multiple: true
 
       - name: Publish distribution 📦 to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b # release/v1
 
   github-release:
     name: >-
@@ -154,12 +151,12 @@ jobs:
 
     steps:
       - name: Download all the dists
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           path: dist
 
       - name: Sign the dists with Sigstore
-        uses: sigstore/gh-action-sigstore-python@v2.1.1
+        uses: sigstore/gh-action-sigstore-python@61f6a500bbfdd9a2a339cf033e5421951fbc1cd2 # v2.1.1
         with:
           inputs: >-
             ./dist/*.tar.gz

@@ -1,0 +1,14 @@
+version: 2
+
+updates:
+  - package-ecosystem: "github-actions"
+    cooldown:
+      default-days: 3
+    directory: "/"
+    schedule:
+      # Check for updates to GitHub Actions every week
+      interval: "weekly"
+    groups:
+      all:
+        patterns:
+        - "*"

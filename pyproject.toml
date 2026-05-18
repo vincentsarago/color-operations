@@ -3,8 +3,7 @@ requires = [
   "setuptools",
   "wheel",
   "cython>=0.29.32",
-  "numpy>=2.0; python_version >= '3.9'",
-  "oldest-supported-numpy; python_version < '3.9'"
+  "numpy>=2.0",
 ]
 
 [tool.coverage.run]
@@ -20,12 +19,8 @@ exclude_lines = [
 
 [tool.isort]
 profile = "black"
-known_first_party = ["tipg"]
-known_third_party = ["geojson_pydantic", "buildpg", "pydantic"]
-forced_separate = [
-    "fastapi",
-    "starlette",
-]
+known_first_party = ["color_operations"]
+known_third_party = ["numpy"]
 default_section = "THIRDPARTY"
 
 [tool.mypy]
