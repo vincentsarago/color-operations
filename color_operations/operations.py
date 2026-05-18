@@ -171,7 +171,7 @@ def simple_atmo_opstring(haze, contrast, bias):
     gamma_b = 1 - haze
     gamma_g = 1 - (haze / 3.0)
     ops = (
-        "gamma g {gamma_g}, " "gamma b {gamma_b}, " "sigmoidal rgb {contrast} {bias}"
+        "gamma g {gamma_g}, gamma b {gamma_b}, sigmoidal rgb {contrast} {bias}"
     ).format(gamma_g=gamma_g, gamma_b=gamma_b, contrast=contrast, bias=bias)
 
     return ops
