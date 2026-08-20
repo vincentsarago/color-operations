@@ -1,4 +1,9 @@
 
+## 0.4.0 (2026-08-20)
+
+* switch to hatch and hatch-cython for build system
+* add uv lockfile 
+
 ## 0.3.0 (2026-05-18)
 
 * drop python 3.9 and 3.10 support
