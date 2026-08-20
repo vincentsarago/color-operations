@@ -8,6 +8,7 @@ on:
     tags:
     - '*'
   pull_request:
+  workflow_dispatch:
 
 jobs:
   tests:
@@ -83,7 +84,7 @@ jobs:
           path: dist/*.tar.gz
 
   wheels:
-    if: startsWith(github.event.ref, 'refs/tags') || github.event_name == 'release'
+    if: startsWith(github.event.ref, 'refs/tags') || github.event_name == 'release' || github.event_name == 'workflow_dispatch'
     needs:
       - tests
     name: Build wheels for ${{ matrix.os }}
@@ -91,17 +92,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-2019, macos-latest]
+        os: [ubuntu-latest, windows-2022, macos-latest]
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Set up QEMU
         if: runner.os == 'Linux'
-        uses: docker/setup-qemu-action@96fe6ef7f33517b61c61be40b68a1882f3264fb8 # v4
+        uses: docker/setup-qemu-action@96fe6ef7f33517b61c61be40b68a1882f3264fb8 # v4.2.0
         with:
           platforms: arm64
 
-      - uses: pypa/cibuildwheel@4726cd35bb13f7bde50cf2761f2499ac7b3aa32c # v4.1.1
+      - uses: pypa/cibuildwheel@1828c10ab37f080699c7b81cea34097c684a7074 # v4.2.0
         env:
           # https://github.com/mapbox/rio-color/blob/0ab59ad8e2db99ad1d0c8bd8c2e4cf8d0c3114cf/appveyor.yml#L3
           CIBW_SKIP: 'cp27* cp35* pp* *-win32 *-manylinux_i686 *musllinux*'
@@ -110,7 +111,7 @@ jobs:
           # CIBW_TEST_REQUIRES: pytest colormath==2.0.2
           # CIBW_TEST_COMMAND: python -m pytest {project}/tests
 
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: wheels-${{ matrix.os }}-${{ strategy.job-index }}
           path: ./wheelhouse/*.whl
