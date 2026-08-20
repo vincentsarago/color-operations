@@ -1,17 +1,22 @@
 repos:
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.12.5
+    hooks:
+      - id: uv-lock
+
   - repo: https://github.com/abravalheri/validate-pyproject
-    rev: v0.25
+    rev: '0.26'
     hooks:
       - id: validate-pyproject
 
   - repo: https://github.com/PyCQA/isort
-    rev: 9.0.0a3
+    rev: 9.0.0b5
     hooks:
       - id: isort
         language_version: python
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.13
+    rev: v0.16.3
     hooks:
       - id: ruff
         args: ["--fix"]
@@ -19,7 +24,7 @@ repos:
       - id: ruff-format
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v2.1.0
+    rev: v2.3.1
     hooks:
       - id: mypy
         language_version: python

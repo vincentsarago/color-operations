@@ -30,13 +30,16 @@ python -m pip install -U pip
 python -m pip install color-operations
 ```
 
-Build from source
+or build from source
+
+We recommand using [`uv`](https://docs.astral.sh/uv) as project manager for development.
+
+See https://docs.astral.sh/uv/getting-started/installation/ for installation 
 
 ```
 git checkout https://github.com/vincentsarago/color-operations.git
 cd color-operations
-python -m pip install -U pip
-python -m pip install -e .
+uv sync
 ```
 
 ## Operations
