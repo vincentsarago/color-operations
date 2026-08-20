@@ -4,16 +4,18 @@ Issues and pull requests are more than welcome.
 
 ### dev install
 
+This project uses [uv](https://docs.astral.sh/uv/) to manage its development environment.
+
 ```bash
 git clone https://github.com/vincentsarago/color-operations.git
 cd color-operations
-python -m pip install -e ".[test,dev]"
+uv sync
 ```
 
 You can then run the tests with the following command:
 
 ```sh
-python -m pytest --cov color_operations --cov-report term-missing
+uv run pytest --cov color_operations --cov-report term-missing
 ```
 
 ### pre-commit
@@ -21,5 +23,5 @@ python -m pytest --cov color_operations --cov-report term-missing
 This repo is set to use `pre-commit` to run *isort*, *flake8*, *pydocstring*, *black* ("uncompromising Python code formatter") and mypy when committing new code.
 
 ```bash
-$ pre-commit install
+uv run pre-commit install
 ```

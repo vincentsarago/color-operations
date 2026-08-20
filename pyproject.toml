@@ -1,10 +1,87 @@
 [build-system]
 requires = [
-  "setuptools",
-  "wheel",
+  "hatchling",
+  "hatch-cython",
   "cython>=0.29.32",
   "numpy>=2.0",
+  "setuptools",
 ]
+build-backend = "hatchling.build"
+
+[project]
+name = "color-operations"
+description = "Apply basic color-oriented image operations."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [
+  {name = "Charlie Loyd", email = "charlie@mapbox.com"},
+]
+maintainers = [
+  {name = "Vincent Sarago", email = "vincent@developmentseed.com"},
+]
+keywords = []
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "Programming Language :: Cython",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Multimedia :: Graphics :: Graphics Conversion",
+  "Topic :: Scientific/Engineering :: GIS",
+]
+dynamic = ["version"]
+dependencies = [
+  "numpy",
+]
+
+[dependency-groups]
+dev = [
+  "pytest",
+  "pytest-cov",
+  "colormath==2.0.2",
+  "pre-commit",
+  "bump-my-version",
+]
+
+[project.urls]
+Homepage = "https://github.com/vincentsarago/color-operations"
+Source = "https://github.com/vincentsarago/color-operations"
+Issues = "https://github.com/vincentsarago/color-operations/issues"
+
+# hatch-cython builds the Cython extension via an internal setuptools call
+# that reads this pyproject.toml directly; without an explicit `packages`
+# here setuptools' own auto-discovery gets confused by top-level non-package
+# directories (e.g. img/) and refuses to build. Not read by hatchling itself.
+[tool.setuptools]
+packages = ["color_operations"]
+
+[tool.hatch.version]
+path = "color_operations/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["color_operations"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "/color_operations",
+  "/tests",
+  "/CHANGES.md",
+  "/LICENSE",
+  "/README.md",
+]
+
+[tool.hatch.build.targets.wheel.hooks.cython]
+dependencies = ["hatch-cython"]
+
+[tool.hatch.build.targets.wheel.hooks.cython.options]
+src = "color_operations"
+include_numpy = true
+compile_py = false
+compile_args = ["-O2"]
 
 [tool.coverage.run]
 branch = true
